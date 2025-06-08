@@ -1,13 +1,17 @@
 from collections import deque
 
 if __name__ == "__main__":
-    transiciones = [(0, 'a', 'R', 0, 'AR'), (0, 'a', 'A', 0, 'AA'), (0, 'b', 'A', 1, '-'),
-                     (1, 'b', 'A', 1, '-'), (1, '-', 'R', 2, 'R')]
+    transiciones = [(0, 'a', 'R', 0, 'AAR'), (0, 'a', 'A', 0, 'AAA'), (0, 'b', 'A', 1, 'BA'),
+                     (1, 'b', 'B', 1, 'BB'), (1, 'c', 'B', 2, '-'), (2, 'c', 'B', 2, '-'), (2, 'c', 'A', 3, 'A'),
+                     (3, 'c', 'A', 3, 'A'), (0, 'c', 'A', 3, 'A'), (3, 'd', 'A', 4,'-'), (4, 'd', 'A', 4, '-'), (4, 'd', 'R', 4, 'R'),
+                     (4, '-', 'R', 5, 'R')]
     estado_actual = 0
-    estado_final = 2
     pila = deque(['R'])
     palabra = input("Ingrese la palabra a procesar: ")
-
+    estado_final = input("Ingrese estado final (si acepta por stack vacio dejar en blanco): ")
+    print("Estado final: ", estado_final)
+    palabra = palabra + '-'
+    
 #Problema: con este for no se alcanza a llegar a estado final
     for i in range(len(palabra)):
         simbolo_actual = palabra[i]
@@ -29,8 +33,11 @@ if __name__ == "__main__":
         elif resultado[4] == '-':
             pila.popleft()
         
-    '''if estado_actual == estado_final:
-        print("Cadena aceptada por estado final")'''
+    print("Estado final alcanzado: ", estado_actual)
+    if estado_actual == estado_final:
+        print("Cadena aceptada por estado final")
+    elif not estado_final and not pila:
+        print("Cadena aceptada por stack vacio")
         
 
 
