@@ -32,9 +32,9 @@ if __name__ == "__main__":
                 pila.appendleft(resultado[4][j])
         elif resultado[4] == '-':
             pila.popleft()
-        
-    print("Estado final alcanzado: ", estado_actual)
-    if estado_actual == estado_final:
+                  
+                  
+    if str(estado_actual) == estado_final:
         print("Cadena aceptada por estado final")
     elif not estado_final and not pila:
         print("Cadena aceptada por stack vacio")
