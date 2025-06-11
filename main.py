@@ -117,7 +117,9 @@ def menu_editar():
     for i, linea in enumerate(lineas):
         menu.entryconfig(i, font=fuente1, background="#f5cf9f")
     
-
+    label_inst = tk.Label(fondo, text="(Para ingresar ε, escriba '-')", font=fuente5, bg="#fcf6d2")
+    label_inst.place(x=150, y=60)
+    
     label11 = tk.Label(fondo, text="Estado actual", font=fuente1, bg="#fcf6d2")
     label11.place(x=10, y=100)
     labelq11 = tk.Label(fondo, text="q", font=fuente4, bg="#fcf6d2")
@@ -154,8 +156,8 @@ def menu_editar():
     boton_cambios = tk.Button(fondo, text="Confirmar cambios", command=editar, font=fuente1, relief=tk.SOLID, borderwidth=2, bg="#f5cf9f")
     boton_cambios.place(x=170, y=250)
 
-    frame_ocultar2 = tk.Frame(fondo, bg="#fcf6d2", height=220, width=500)
-    frame_ocultar2.place(x=0, y=80)
+    frame_ocultar2 = tk.Frame(fondo, bg="#fcf6d2", height=240, width=500)
+    frame_ocultar2.place(x=0, y=60)
 
 def ocultar():
     if (opcion_final.get() == "estado"):
@@ -228,48 +230,48 @@ label_paso2.place(x=10, y=10)
 
 label_inst1 = tk.Label(frame_sup, text="Ingrese las transiciones del APD una por una", font=fuente5, bg="#fcf6d2")
 label_inst1.place(x=10, y=45)
-label_inst2 = tk.Label(frame_sup, text="(Para ingresar ε, ingrese '-')", font=fuente5, bg="#fcf6d2")
-label_inst2.place(x=290, y=200)
+label_inst2 = tk.Label(frame_sup, text="(Para ingresar ε, escriba '-')", font=fuente5, bg="#fcf6d2")
+label_inst2.place(x=10, y=65)
 label_inst3 = tk.Label(frame_inf, text="Indique las siguientes caracteristicas de su APD", font=fuente5, bg="#f5cf9f")
 label_inst3.place(x=10, y=35)
 
 
 
 label1 = tk.Label(frame_sup, text="Estado actual", font=fuente1, bg="#fcf6d2")
-label1.place(x=10, y=100)
+label1.place(x=10, y=140)
 labelq1 = tk.Label(frame_sup, text="q", font=fuente4, bg="#fcf6d2")
-labelq1.place(x=133, y=95)
+labelq1.place(x=133, y=135)
 entry1 = tk.Entry(frame_sup, width=3, font=fuente3, relief=tk.SOLID, borderwidth=2)
-entry1.place(x=150, y=100)
+entry1.place(x=150, y=140)
 
 label2 = tk.Label(frame_sup, text="Simbolo a leer", font=fuente1, bg="#fcf6d2")
-label2.place(x=10, y=140)
+label2.place(x=10, y=180)
 entry2 = tk.Entry(frame_sup, width=3, font=fuente3, relief=tk.SOLID, borderwidth=2)
-entry2.place(x=150, y=140)
+entry2.place(x=150, y=180)
 
 label3 = tk.Label(frame_sup, text="Tope de stack", font=fuente1, bg="#fcf6d2")
-label3.place(x=10, y=180)
+label3.place(x=10, y=220)
 entry3 = tk.Entry(frame_sup, width=3, font=fuente3, relief=tk.SOLID, borderwidth=2)
-entry3.place(x=150, y=180)
+entry3.place(x=150, y=220)
 
 imagen = tk.PhotoImage(file="flecha.png")
 label_flecha = tk.Label(ventana, image=imagen, bg="#fcf6d2")
-label_flecha.place(x=210, y=125)
+label_flecha.place(x=210, y=165)
 
 label4 = tk.Label(frame_sup, text="Nuevo estado", font=fuente1, bg="#fcf6d2")
-label4.place(x=290, y=120)
+label4.place(x=290, y=160)
 labelq2 = tk.Label(frame_sup, text="q", font=fuente4, bg="#fcf6d2")
-labelq2.place(x=423, y=115)
+labelq2.place(x=423, y=155)
 entry4 = tk.Entry(frame_sup, width=3, font=fuente3, relief=tk.SOLID, borderwidth=2)
-entry4.place(x=440, y=120)
+entry4.place(x=440, y=160)
 
 label5 = tk.Label(frame_sup, text="Actualizar stack", font=fuente1, bg="#fcf6d2")
-label5.place(x=290, y=160)
+label5.place(x=290, y=200)
 entry5 = tk.Entry(frame_sup, width=6, font=fuente3, relief=tk.SOLID, borderwidth=2)
-entry5.place(x=440, y=160)
+entry5.place(x=440, y=200)
 
 boton_agregar = tk.Button(frame_sup, text="Agregar transicion", command=recoger_entrada, font=fuente1, relief=tk.SOLID, borderwidth=2, bg="#f5cf9f")
-boton_agregar.place(x=180, y=270)
+boton_agregar.place(x=180, y=280)
 
 boton_editar = tk.Button(frame_sup, text="Editar transicion", command=menu_editar, font=fuente1, relief=tk.SOLID, borderwidth=2, bg="#f5cf9f")
 boton_editar.place(x=520, y=350)
