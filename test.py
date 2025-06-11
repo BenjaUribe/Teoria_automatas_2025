@@ -159,9 +159,6 @@ def ocultar():
         frame_ocultar.place(x=8, y=145)
 
     
-
-        
-
 ventana = tk.Tk()
 ventana.title("Simulador APD")
 ventana.geometry("800x600")
@@ -257,7 +254,7 @@ radio2.place(x=280, y=100)
 frame_ocultar = tk.Frame(frame_inf, bg="#f5cf9f", height=30, width=200)
 frame_ocultar.place(x=8, y=145)
 
-boton_verificar = tk.Button(frame_inf, text="Verificar palabra", font=fuente1, relief=tk.SOLID, borderwidth=2, bg="#fcf6d2")
+boton_verificar = tk.Button(frame_inf, text="Verificar palabra", font=fuente1, relief=tk.SOLID, borderwidth=2, bg="#fcf6d2", command=validar_palabra)
 boton_verificar.place(x=560, y=150)
     
 ventana.mainloop()
