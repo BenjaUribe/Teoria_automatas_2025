@@ -4,10 +4,9 @@ from tkinter import messagebox
 import tkinter.font as tkFont
 
 """
-    Agregar scrollbar
     agrear ventana de palabra aceptada
     agregar label paso 3
-    intentar eliminar transiciones de a una
+
 """
 
 
@@ -21,34 +20,49 @@ def recoger_entrada():
     
     transicion = (entry1.get(), entry2.get(), entry3.get(),
                   entry4.get(), entry5.get())
-    transiciones.append(transicion)
-    print(transiciones)
 
-    lista_transiciones.config(state="normal")
-    lista_transiciones.insert(tk.END, f"δ(q{entry1.get()},{entry2.get()},{entry3.get()}) = (q{entry4.get()},") #simbolo
-    if (entry5.get() == "-"):
-        lista_transiciones.insert(tk.END, f"ε)\n") #simbolo
-    else:
-        lista_transiciones.insert(tk.END, f"{entry5.get()})\n")
-    lista_transiciones.config(state="disabled")
+    if transicion not in transiciones:
+        transiciones.append(transicion)
+        print(transiciones)
+
+        lista_transiciones.config(state="normal")
+
+        if entry2.get() == "-":
+            char2 = "ε"
+        else:
+            char2 = entry2.get()
+            
+        if entry3.get() == "-":
+            char3 = "ε"
+        else:
+            char3 = entry3.get()
         
-    entry1.delete(0, tk.END)
-    entry2.delete(0, tk.END)
-    entry3.delete(0, tk.END)
-    entry4.delete(0, tk.END)
-    entry5.delete(0, tk.END)
+        lista_transiciones.insert(tk.END, f"δ(q{entry1.get()},{char2},{char3}) = (q{entry4.get()},") #simbolo
+        if (entry5.get() == "-"):
+            lista_transiciones.insert(tk.END, f"ε)\n") #simbolo
+        else:
+            lista_transiciones.insert(tk.END, f"{entry5.get()})\n")
+        lista_transiciones.config(state="disabled")
+            
+        entry1.delete(0, tk.END)
+        entry2.delete(0, tk.END)
+        entry3.delete(0, tk.END)
+        entry4.delete(0, tk.END)
+        entry5.delete(0, tk.END)
+    else:
+        messagebox.showwarning("Transición ya ingresada", "Esta transición ya se encuentra ingresada.")
 
 
-def borrar():
+def borrar_todo():
     global transiciones
+    if transiciones:
+        transiciones = []
 
-    transiciones = []
+        lista_transiciones.config(state="normal")
+        lista_transiciones.delete("1.0", tk.END)
+        lista_transiciones.config(state="disabled")
 
-    lista_transiciones.config(state="normal")
-    lista_transiciones.delete("1.0", tk.END)
-    lista_transiciones.config(state="disabled")
-
-    print(transiciones)
+        print(transiciones)
 
 
 def menu_editar():
@@ -56,9 +70,9 @@ def menu_editar():
     
     def al_cambiar_opcion(*args):
         if seleccion.get() in lineas:
-            frame_ocultar2.place_forget()
+            frame_ocultar3.place_forget()
         else:
-            frame_ocultar2.place(x=0, y=80)
+            frame_ocultar3.place(x=0, y=80)
 
     def editar():
         global transiciones
@@ -91,12 +105,33 @@ def menu_editar():
         lista_transiciones.config(state="disabled")
         
         ventana_emergente.destroy()
+
+    def borrar_una():
+        global transiciones
+
+        del transiciones[lineas.index(seleccion.get())]
+        print(transiciones)
+
+        lista_transiciones.config(state="normal")
+        lineas_texto = lista_transiciones.get("1.0", "end-1c").splitlines()
+        indice_linea = lineas.index(seleccion.get())
+        del lineas_texto[indice_linea]
+
+        lista_transiciones.delete("1.0", tk.END)
+        for linea in lineas_texto:
+            lista_transiciones.insert(tk.END, linea + "\n")
+        lista_transiciones.config(state="disabled")
+        
+        ventana_emergente.destroy()
+
+        
             
     lineas = lista_transiciones.get("1.0", tk.END).splitlines()
     lineas = [linea for linea in lineas if linea.strip()]  
 
     if not lineas:
-        return  
+        return
+       
 
     ventana_emergente = tk.Toplevel(ventana)
     ventana_emergente.title("Editar transiciones")
@@ -106,7 +141,7 @@ def menu_editar():
     fondo.place(x=0, y=0)
 
     seleccion = tk.StringVar(ventana_emergente)
-    seleccion.set("Seleccione transicion a editar")
+    seleccion.set("Seleccione transicion")
     seleccion.trace_add("write", al_cambiar_opcion)
 
     menu_opciones = tk.OptionMenu(ventana_emergente, seleccion, *lineas)
@@ -116,6 +151,7 @@ def menu_editar():
     menu = menu_opciones["menu"]
     for i, linea in enumerate(lineas):
         menu.entryconfig(i, font=fuente1, background="#f5cf9f")
+   
     
     label_inst = tk.Label(fondo, text="(Para ingresar ε, escriba '-')", font=fuente5, bg="#fcf6d2")
     label_inst.place(x=150, y=60)
@@ -159,6 +195,15 @@ def menu_editar():
     frame_ocultar2 = tk.Frame(fondo, bg="#fcf6d2", height=240, width=500)
     frame_ocultar2.place(x=0, y=60)
 
+    frame_ocultar3 = tk.Frame(fondo, bg="#fcf6d2", height=240, width=500)
+    frame_ocultar3.place(x=0, y=60)
+
+    boton_editar = tk.Button(frame_ocultar2, text="Editar", font=fuente1, command=frame_ocultar2.place_forget, relief=tk.SOLID, borderwidth=2, bg="#f5cf9f")
+    boton_editar.place(x=100, y=60)
+
+    boton_borrar = tk.Button(frame_ocultar2, text="Borrar", font=fuente1, command=borrar_una, relief=tk.SOLID, borderwidth=2, bg="#f5cf9f")
+    boton_borrar.place(x=340, y=60)
+
 def ocultar():
     if (opcion_final.get() == "estado"):
         frame_ocultar.place_forget()
@@ -177,32 +222,39 @@ def validar_palabra():
     if (entry7.get()):
         estado_final = entry7.get()
 
-    pila = deque(['R'])
-    for i in range(len(palabra)):
-        simbolo_actual = palabra[i]
-        print("Simbolo actual: ", simbolo_actual)
-        print("Estado actual: ", estado_actual)
-        print("Tope de pila: ", pila[0])
-        
-        #Cambio: ahora tambien busca la transicion que coincida con tope de pila
-        resultado = next((t for t in transiciones if (t[0] == estado_actual and t[1] == simbolo_actual) and t[2] == pila[0]), None)
-        print("Transicion encontrada: ", resultado, "\n")
-        if not resultado:
-            print(f"Error: No hay transicion '{simbolo_actual}'")
-            break
-         
-        estado_actual = resultado[3]
-        if len(resultado[4]) > 1:
-            for j in range(len(resultado[4])-2, -1, -1):
-                pila.appendleft(resultado[4][j])
-        elif resultado[4] == '-':
-            pila.popleft()
+    if (not transiciones or not estado_inicial or (opcion_final.get() == "estado" and not estado_final)):
+        messagebox.showwarning("Campos vacios", "Se han encontrado campos vacíos. Por favor, verifique que se hayan ingresado transiciones, estado inicial, y estado final si va a utilizarlo.")
+
+    else:
+        pila = deque(['R'])
+        for i in range(len(palabra)):
+            simbolo_actual = palabra[i]
+            print("Simbolo actual: ", simbolo_actual)
+            print("Estado actual: ", estado_actual)
+            print("Tope de pila: ", pila[0])
             
-                        
-    if str(estado_actual) == estado_final:
-        print("Cadena aceptada por estado final")
-    elif not estado_final and not pila:
-        print("Cadena aceptada por stack vacio")
+            #Cambio: ahora tambien busca la transicion que coincida con tope de pila
+            resultado = next((t for t in transiciones if (t[0] == estado_actual and t[1] == simbolo_actual) and t[2] == pila[0]), None)
+            print("Transicion encontrada: ", resultado, "\n")
+            if not resultado:
+                messagebox.showerror("Palabra rechazada", "El APD ingresado no acepta esta palabra")
+                print(f"Error: No hay transicion '{simbolo_actual}'")
+                break
+             
+            estado_actual = resultado[3]
+            if len(resultado[4]) > 1:
+                for j in range(len(resultado[4])-2, -1, -1):
+                    pila.appendleft(resultado[4][j])
+            elif resultado[4] == '-':
+                pila.popleft()
+                
+                            
+        if str(estado_actual) == estado_final:
+            messagebox.showinfo("Palabra aceptada", "El APD ingresado acepta esta palabra por estado final")
+            print("Cadena aceptada por estado final")
+        elif not estado_final and not pila:
+            messagebox.showinfo("Palabra aceptada", "El APD ingresado acepta esta palabra por stack vacio")
+            print("Cadena aceptada por stack vacio")
     
 
 transiciones = []
@@ -227,6 +279,8 @@ label_paso1 = tk.Label(frame_sup, text="Paso 1", font=fuente4, bg="#fcf6d2")
 label_paso1.place(x=10, y=20)
 label_paso2 = tk.Label(frame_inf, text="Paso 2", font=fuente4, bg="#f5cf9f")
 label_paso2.place(x=10, y=10)
+label_paso3 = tk.Label(frame_inf, text="Paso 3", font=fuente4, bg="#f5cf9f")
+label_paso3.place(x=485, y=10)
 
 label_inst1 = tk.Label(frame_sup, text="Ingrese las transiciones del APD una por una", font=fuente5, bg="#fcf6d2")
 label_inst1.place(x=10, y=45)
@@ -234,6 +288,10 @@ label_inst2 = tk.Label(frame_sup, text="(Para ingresar ε, escriba '-')", font=f
 label_inst2.place(x=10, y=65)
 label_inst3 = tk.Label(frame_inf, text="Indique las siguientes caracteristicas de su APD", font=fuente5, bg="#f5cf9f")
 label_inst3.place(x=10, y=35)
+label_inst4 = tk.Label(frame_inf, text="Ingrese palabra a verificar", font=fuente5, bg="#f5cf9f")
+label_inst4.place(x=485, y=35)
+label_inst5 = tk.Label(frame_inf, text="(Para palabra vacía, deje en blanco)", font=fuente5, bg="#f5cf9f")
+label_inst5.place(x=495, y=105)
 
 
 
@@ -273,11 +331,11 @@ entry5.place(x=440, y=200)
 boton_agregar = tk.Button(frame_sup, text="Agregar transicion", command=recoger_entrada, font=fuente1, relief=tk.SOLID, borderwidth=2, bg="#f5cf9f")
 boton_agregar.place(x=180, y=280)
 
-boton_editar = tk.Button(frame_sup, text="Editar transicion", command=menu_editar, font=fuente1, relief=tk.SOLID, borderwidth=2, bg="#f5cf9f")
-boton_editar.place(x=520, y=350)
+boton_editar = tk.Button(frame_sup, text="Editar/borrar transicion", command=menu_editar, font=fuente1, relief=tk.SOLID, borderwidth=2, bg="#f5cf9f")
+boton_editar.place(x=500, y=350)
 
-boton_borrar = tk.Button(frame_sup, text="Borrar todo", command=borrar, font=fuente1, relief=tk.SOLID, borderwidth=2, bg="#f5cf9f")
-boton_borrar.place(x=675, y=350)
+boton_borrar_todo = tk.Button(frame_sup, text="Borrar todas", command=borrar_todo, font=fuente1, relief=tk.SOLID, borderwidth=2, bg="#f5cf9f")
+boton_borrar_todo.place(x=690, y=350)
 
 label_transiciones = tk.Label(frame_sup, text="Transiciones ingresadas", font=fuente1, bg="#fcf6d2")
 label_transiciones.place(x=510, y=25)
@@ -285,6 +343,9 @@ lista_transiciones = tk.Text(frame_sup, height=15, width=28, font=fuente2, relie
 lista_transiciones.place(x=520, y=50)
 lista_transiciones.config(state="disabled")
 
+scrollbar = tk.Scrollbar(frame_sup, orient="vertical", command=lista_transiciones.yview)
+scrollbar.place(x=780, y=50, height=290)
+lista_transiciones.config(yscrollcommand=scrollbar.set)
 
 label6 = tk.Label(frame_inf, text="Estado inicial", font=fuente1, bg="#f5cf9f")
 label6.place(x=10, y=80)
@@ -300,8 +361,6 @@ labelq7.place(x=133, y=155)
 entry7 = tk.Entry(frame_inf, width=3, font=fuente3, relief=tk.SOLID, borderwidth=2)
 entry7.place(x=150, y=160)
 
-label_palabra = tk.Label(frame_inf, text="Ingrese una palabra", font=fuente1, bg="#f5cf9f")
-label_palabra.place(x=550, y=40)
 entry_palabra = tk.Entry(frame_inf, width=30, font=fuente3, relief=tk.SOLID, borderwidth=2)
 entry_palabra.place(x=485, y=80)
 
