@@ -1,13 +1,13 @@
+"""
+    Benjamin Uribe
+    Marcelo Rojas
+    Leonardo Moreno
+"""
+
 from collections import deque
 import tkinter as tk
 from tkinter import messagebox
 import tkinter.font as tkFont
-
-"""
-    agrear ventana de palabra aceptada
-    agregar label paso 3
-
-"""
 
 
 def recoger_entrada():
