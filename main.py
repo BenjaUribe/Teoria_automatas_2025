@@ -3,11 +3,18 @@
     Marcelo Rojas
     Leonardo Moreno
 """
+import os
+import sys
 
 from collections import deque
 import tkinter as tk
 from tkinter import messagebox
 import tkinter.font as tkFont
+
+def obtener_ruta(nombre_archivo):
+    """Devuelve una ruta de archivos compatible con PyInstaller"""
+    base_path = getattr(sys, '_MEIPASS', os.path.abspath("."))
+    return os.path.join(base_path, nombre_archivo)
 
 
 def recoger_entrada():
@@ -15,7 +22,7 @@ def recoger_entrada():
     if (not entry1.get().strip() or not entry2.get().strip() or
         not entry3.get().strip() or not entry4.get().strip() or
         not entry5.get().strip()):
-        messagebox.showwarning("Campos vacios", "Por favor, complete todos los campos.")
+        messagebox.showwarning("Campos vacíos", "Por favor, complete todos los campos.")
         return
     
     transicion = (entry1.get(), entry2.get(), entry3.get(),
@@ -141,7 +148,7 @@ def menu_editar():
     fondo.place(x=0, y=0)
 
     seleccion = tk.StringVar(ventana_emergente)
-    seleccion.set("Seleccione transicion")
+    seleccion.set("Seleccione transición")
     seleccion.trace_add("write", al_cambiar_opcion)
 
     menu_opciones = tk.OptionMenu(ventana_emergente, seleccion, *lineas)
@@ -173,7 +180,8 @@ def menu_editar():
     entry13 = tk.Entry(fondo, width=3, font=fuente3, relief=tk.SOLID, borderwidth=2)
     entry13.place(x=150, y=180)
 
-    imagen1 = tk.PhotoImage(file="flecha.png")
+    ruta_imagen = obtener_ruta("flecha.png")
+    imagen1 = tk.PhotoImage(file=ruta_imagen)
     label_flecha1 = tk.Label(fondo, image=imagen, bg="#fcf6d2")
     label_flecha1.place(x=210, y=125)
 
@@ -223,7 +231,7 @@ def validar_palabra():
         estado_final = entry7.get()
 
     if (not transiciones or not estado_inicial or (opcion_final.get() == "estado" and not estado_final)):
-        messagebox.showwarning("Campos vacios", "Se han encontrado campos vacíos. Por favor, verifique que se hayan ingresado transiciones, estado inicial, y estado final si va a utilizarlo.")
+        messagebox.showwarning("Campos vacíos", "Se han encontrado campos vacíos. Por favor, verifique que se hayan ingresado transiciones, estado inicial, y estado final si va a utilizarlo.")
 
     else:
         pila = deque(['R'])
@@ -238,7 +246,7 @@ def validar_palabra():
             print("Transicion encontrada: ", resultado, "\n")
             if not resultado:
                 messagebox.showerror("Palabra rechazada", "El APD ingresado no acepta esta palabra")
-                print(f"Error: No hay transicion '{simbolo_actual}'")
+                print(f"Error: No hay transición '{simbolo_actual}'")
                 break
              
             estado_actual = resultado[3]
@@ -312,7 +320,8 @@ label3.place(x=10, y=220)
 entry3 = tk.Entry(frame_sup, width=3, font=fuente3, relief=tk.SOLID, borderwidth=2)
 entry3.place(x=150, y=220)
 
-imagen = tk.PhotoImage(file="flecha.png")
+ruta_imagen = obtener_ruta("flecha.png")
+imagen = tk.PhotoImage(file=ruta_imagen)
 label_flecha = tk.Label(ventana, image=imagen, bg="#fcf6d2")
 label_flecha.place(x=210, y=165)
 
@@ -328,10 +337,10 @@ label5.place(x=290, y=200)
 entry5 = tk.Entry(frame_sup, width=6, font=fuente3, relief=tk.SOLID, borderwidth=2)
 entry5.place(x=440, y=200)
 
-boton_agregar = tk.Button(frame_sup, text="Agregar transicion", command=recoger_entrada, font=fuente1, relief=tk.SOLID, borderwidth=2, bg="#f5cf9f")
+boton_agregar = tk.Button(frame_sup, text="Agregar transición", command=recoger_entrada, font=fuente1, relief=tk.SOLID, borderwidth=2, bg="#f5cf9f")
 boton_agregar.place(x=180, y=280)
 
-boton_editar = tk.Button(frame_sup, text="Editar/borrar transicion", command=menu_editar, font=fuente1, relief=tk.SOLID, borderwidth=2, bg="#f5cf9f")
+boton_editar = tk.Button(frame_sup, text="Editar/borrar transición", command=menu_editar, font=fuente1, relief=tk.SOLID, borderwidth=2, bg="#f5cf9f")
 boton_editar.place(x=500, y=350)
 
 boton_borrar_todo = tk.Button(frame_sup, text="Borrar todas", command=borrar_todo, font=fuente1, relief=tk.SOLID, borderwidth=2, bg="#f5cf9f")
