@@ -94,8 +94,18 @@ def menu_editar():
         transiciones[lineas.index(seleccion.get())] = transicion_nueva
         print(transiciones)
 
+        if entry12.get() == "-":
+            char12 = "ε"
+        else:
+            char12 = entry12.get()
+            
+        if entry13.get() == "-":
+            char13 = "ε"
+        else:
+            char13 = entry13.get()
+
         lista_transiciones.config(state="normal")
-        texto_transicion = f"δ(q{entry11.get()},{entry12.get()},{entry13.get()}) = (q{entry14.get()},"
+        texto_transicion = f"δ(q{entry11.get()},{char12},{char13}) = (q{entry14.get()},"
         if (entry15.get() == "-"):
             texto_transicion += f"ε)"
         else:
@@ -263,7 +273,8 @@ def validar_palabra():
         elif not estado_final and not pila:
             messagebox.showinfo("Palabra aceptada", "El APD ingresado acepta esta palabra por stack vacio")
             print("Cadena aceptada por stack vacio")
-    
+        else:
+            messagebox.showerror("Palabra rechazada", "El APD ingresado no acepta esta palabra")
 
 transiciones = []
 
